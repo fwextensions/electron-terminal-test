@@ -16,12 +16,10 @@ function createWindow()
 		}
 	});
 	mainWindow.loadURL(`file://${__dirname}/index.html`);
-	mainWindow.on("closed", function() {
-		mainWindow = null;
-	});
+	mainWindow.on("closed", () => mainWindow = null);
 
 	const ptyProcess = pty.spawn(shell, [], {
-		name: "xterm-color",
+		name: "xterm",
 			// these seem to set the max cols/rows for the terminal
 		cols: 200,
 		rows: 200,
@@ -29,14 +27,12 @@ function createWindow()
 		env: process.env
 	});
 
-	ptyProcess.on('data', data => {
+	ptyProcess.on("data", data => {
 		mainWindow.webContents.send("terminal.incomingData", data);
 		console.log("Data sent");
 	});
 
-	ipcMain.on("terminal.keystroke", (event, key) => {
-		ptyProcess.write(key);
-	});
+	ipcMain.on("terminal.keystroke", (event, key) => ptyProcess.write(key));
 }
 
 app.on("ready", createWindow);
