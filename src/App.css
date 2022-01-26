@@ -1,11 +1,18 @@
 body {
 	background-color: black;
 	margin: 0;
-	padding: 8px;
+	padding: .5vmin;
 	overflow: hidden;
 }
 
 #terminal {
-	width: 100vw;
-	height: 100vh;
+	width: 99vw;
+	height: 99vh;
 }
+
+/* unclear if this is necessary.  suggested in https://github.com/xtermjs/xterm.js/issues/3564#issuecomment-1004417440 */
+/*
+.xterm .xterm-viewport {
+    width: initial !important;
+}
+*/

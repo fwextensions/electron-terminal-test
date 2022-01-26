@@ -8,8 +8,8 @@ let mainWindow;
 function createWindow()
 {
 	mainWindow = new BrowserWindow({
-		height: 450,
-		width: 800,
+		width: 1000,
+		height: 655,
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
@@ -20,39 +20,34 @@ function createWindow()
 		mainWindow = null;
 	});
 
-
-	//ipcing
-
 	const ptyProcess = pty.spawn(shell, [], {
 		name: "xterm-color",
-		cols: 80,
-		rows: 30,
-		cwd: process.env.HOME,
+			// these seem to set the max cols/rows for the terminal
+		cols: 200,
+		rows: 200,
+		cwd: process.env.INIT_CWD,
 		env: process.env
 	});
 
-	ptyProcess.on('data', function(data) {
+	ptyProcess.on('data', data => {
 		mainWindow.webContents.send("terminal.incomingData", data);
 		console.log("Data sent");
 	});
-	ipcMain.on("terminal.keystroke", (
-		event,
-		key) => {
+
+	ipcMain.on("terminal.keystroke", (event, key) => {
 		ptyProcess.write(key);
 	});
-
-
 }
 
 app.on("ready", createWindow);
 
-app.on("window-all-closed", function() {
+app.on("window-all-closed", () => {
 	if (process.platform !== "darwin") {
 		app.quit();
 	}
 });
 
-app.on("activate", function() {
+app.on("activate", () => {
 	if (mainWindow === null) {
 		createWindow();
 	}
