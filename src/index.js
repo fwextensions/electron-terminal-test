@@ -1,7 +1,9 @@
 const ipc = require("electron").ipcRenderer;
 const FitAddon = require("xterm-addon-fit").FitAddon;
 
-const term = new Terminal();
+const term = new Terminal({
+	fontFamily: "Cascadia Code"
+});
 const fitAddon = new FitAddon();
 let resizeTimer;
 
